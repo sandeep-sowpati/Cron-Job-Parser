@@ -46,15 +46,19 @@ A cron expression of: */15 0 1,15,31 * 1-5 /usr/bin/find
 
 ### Running Test Cases
 
+```
 Navigate to the current Directory and 
 python -m unittest discover tests
+```
 
 
 ### Executing the file
 
+```
 Navigate to the current Directory and 
 cd cron
 python3 parser.py "Cron Inut"
+```
 
 
 
