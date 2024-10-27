@@ -44,6 +44,14 @@ DaysOfWeek has has 1-5 so if the DaysOfMonth falls in this days , the job will b
 
 /usr/bin/find is the task that will trigger.
 
+
+/usr/bin/find -v foo -> can take multiple args
+
+5-2 -> 5,6,7,1,2
+
+% 2 is less than : 7+2= 9
+5 , 6,7,8,9
+5,6,7,1,2
 """
 
 #All Imports go here
@@ -106,7 +114,17 @@ def parse_special_expression(speacial_expression:str,starting_range:int,ending_r
 
     elif '-' in speacial_expression:
         start,end = list(map(int,speacial_expression.split('-')))
-        parsed_data_list = [i for i in range(start,end+1)]
+        if end < start:
+            end = end+ending_range
+
+        for num in range(start,end+1):
+            temp_num = num
+            if num>ending_range:
+                temp_num = num%ending_range
+            parsed_data_list.append(temp_num)
+
+
+        # parsed_data_list = [i for i in range(start,end+1)]
         validate_the_data(parsed_data_list,starting_range,ending_range)
 
     return parsed_data_list
@@ -200,6 +218,11 @@ def parse_expression(cron_expression:str)->dict:
     parsed_data = {}
     print(cron_expression)
     FIELD_VALUES = cron_expression.split()
+    # print(FIELD_VALUES)
+    command_line_input_with_or_wo_args = FIELD_VALUES[5:]
+    command_line_task = " ".join(command_line_input_with_or_wo_args)
+    # print(command_line_task)
+    FIELD_VALUES[5] = command_line_task
     for data_field,data_value in zip(DATA_FIELDS,FIELD_VALUES):
         # print(f"{data_field}  : {data_value}")
         function_name  = function_name_mapper.get(data_field)
@@ -220,7 +243,6 @@ def print_parsed_data(parsed_dict:dict[str:list]):
     
 
 def main(raw_string):
-
     """
     Inorder to Solve SRP , implemented this function
     first we parse the expression 
